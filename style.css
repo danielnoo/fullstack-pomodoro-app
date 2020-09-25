@@ -1,0 +1,18 @@
+body {
+  background: red;
+}
+p {
+  margin: 10px 0 !important;
+}
+
+.login-container {
+  
+  max-width: 700px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+#productivity {
+  font-size: 1.3rem;
+  font-weight: 600;
+}

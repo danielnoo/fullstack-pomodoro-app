@@ -1,0 +1,102 @@
+
+<!-- Sound effects obtained from https://www.zapsplat.com -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Snackzz</title>
+    <meta name ="description" content="snackzz">
+    <meta name="author" content="Danielnoo">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/hamburger-24-196148.png" type="image/png"/>
+
+</head>
+
+<body class="container">
+<main class="app">
+  <div id="clock">
+GET TO IT
+  </div>
+
+  <div id="imgBox" class="images" >
+    <img id="coffee" src="doodle-46.svg">
+    <img id="cupcake" src="doodle-24.svg">
+    
+    <img id="burger" src="doodle-05.svg">
+  </div>
+  <div class="images" id="burger"></div>
+  
+  
+  </div>
+ 
+  <div class="breakButtonContainer">
+  
+    <div id="workHeader">Work</div>
+    <div id="workButtons">
+    
+      <p id="shortWorkTimer">25</p>
+      <p id="longWorkTimer">45</p>
+  
+    </div>
+  
+    <div id="breakHeader">Break</div>
+    <div id="breakButtons">
+    
+      <p  id="shortBreak">5</p>
+      <p  id="longBreak">15</p>
+      <p  id="thirtyBreak">30</p>
+      <p  id="sixtyBreak">60</p>
+    
+    </div>
+  
+  
+    <div class="toggleButtons">
+    
+      <p id="pauseButton" >Pause</p>
+      <p id="resetButton" >Reset</p>
+  
+    </div>
+  
+  </div>
+
+  <div id="hourGlass"><img id="hourGlassInside" src="hourglass2.svg"/></div>
+
+  <div onclick="openModal()" id="info">info</div>
+
+
+<!--modal opened if info button clicked-->
+
+<div id="modal-window" class="shadow preload">
+
+    <div class="main-modal">
+      <h1>Main Modal</h1>
+      <button onclick="closeM()">CLOSE Modal</button>
+    </div>
+
+</div>
+</main>
+
+<section class="stats">
+  <div id="statsHeader">Your Stats:</div>
+  <div id="badges"></div>
+</section>
+
+
+
+
+
+
+<footer class="footer">
+  <div class="footerTag">Icons made by <a href="https://www.flaticon.com/authors/alfredo-hernandez" title="Alfredo Hernandez">Alfredo Hernandez</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></div>
+  <div class="footerTag"><a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">Learn About Pomodoro</a></div>
+  <div class="footerTag">Sound effects obtained from <a href="https://www.zapsplat.com">zapsplat.com</a></div>
+</footer>
+
+  <script src="scripts.js"></script>
+</body>
+
+
+</html>

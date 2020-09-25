@@ -1,0 +1,98 @@
+
+
+<main class="app">
+      <div id="clock">
+          GET TO IT, {{name}}
+      </div>
+
+        <div id="imgBox" class="images" >
+          <img id="coffee" src="doodle-46.svg">
+          <img id="cupcake" src="doodle-24.svg">
+    
+          <img id="burger" src="doodle-05.svg">
+        </div>
+         
+  
+  
+  <div class="consoleContainer">
+ 
+      <div class="breakButtonContainer">
+  
+        <div id="workHeader">Work</div>
+        <div id="workButtons">
+    
+          <p id="shortWorkTimer">25</p>
+          <p id="longWorkTimer">45</p>
+  
+        </div>
+  
+        <div id="breakHeader">Break</div>
+        <div id="breakButtons">
+    
+          <p  id="shortBreak">5</p>
+          <p  id="longBreak">15</p>
+          <p  id="thirtyBreak">30</p>
+          <p  id="sixtyBreak">60</p>
+    
+        </div>
+  
+  
+        <div class="toggleButtons">
+    
+          <p id="pauseButton" >Pause</p>
+          <p id="resetButton" >Reset</p>
+  
+        </div>
+  
+    </div>
+  
+  
+    <div class="focusContainer">
+      <div id="focusHeader"><div id="focusHeaderText">Focus</div></div>
+      <div id="focusOne"><input type="text" id="focusOneText" placeholder="Add a focus..."><i id="focusButtonOne" class="fas fa-arrow-alt-circle-right"></i><a href="/auth/logout"><i id="clearFocusOne" class="far fa-times-circle"></i></a></div>
+      <div id="focusTwo"><input type="text" id="focusTwoText" placeholder="Add a focus..."><i id="focusButtonTwo" class="fas fa-arrow-alt-circle-right"></i></div>
+      <div id="focusThree"><input type="text" id="focusThreeText" placeholder="Add a focus..."><i id="focusButtonThree" class="fas fa-arrow-alt-circle-right"></i></div>
+      <div id="rewardHeader"><div id="rewardHeaderText">Reward</div></div>
+      <div id="reward"><input type="text" id="rewardText" placeholder="Add a reward..."><i id="focusButtonReward" class="fas fa-arrow-alt-circle-right"></i></div>
+    </div>
+  
+  </div>
+
+
+  <div id="hourGlass"><img id="hourGlassInside" src="hourglass2.svg"/></div>
+
+  <div onclick="openModal()" id="info">info</div>
+
+
+<!--modal opened if info button clicked-->
+
+<div id="modal-window" class="shadow preload">
+
+    <div class="main-modal">
+      <h1>Main Modal</h1>
+      <button onclick="closeM()">CLOSE Modal</button>
+    </div>
+
+</div>
+</main>
+
+<section class="stats">
+  <div id="statsHeader">Your Stats:</div>
+  <div id="badges"></div>
+</section>
+
+
+
+
+
+
+<footer class="footer">
+  <div class="footerTag">Icons made by <a href="https://www.flaticon.com/authors/alfredo-hernandez" title="Alfredo Hernandez">Alfredo Hernandez</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></div>
+  <div class="footerTag"><a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">Learn About Pomodoro</a></div>
+  <div class="footerTag">Sound effects obtained from <a href="https://www.zapsplat.com">zapsplat.com</a></div>
+</footer>
+
+
+
+
+
