@@ -1,37 +1,17 @@
 // move this later - setting up database posting when a badge is earned
 // move after setting up babel
 
-const earnedBadgeData = [
-  {"name": "coffee"}, 
-  {"name": "cupcake"}, 
-  {"name": "burger"}
-];
-
-async function post(data) {
-  try {
-      // Create request to api service
-      const req = await fetch('/dashboard', {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          
-          // format the data
-          body: JSON.stringify({name: data.name})
-      });
-      
-      const res = await req.json();
-
-      // Log success message
-      console.log(res);                
-  } catch(err) {
-      console.error(`ERROR: ${err}`);
-  }
-};
+import {posty} from './badgeRewards.js'
+import {engageFocuses} from './focusConsole.js'
+import {burgerQuery} from './burgerQuery.js'
 
 
 
+        
 const soundEffect = new Audio('sms-alert-1-daniel_simon.wav');
 const completeEffect = new Audio('finishtone.mp3');
-const burgerEffect = new Audio('burgerlevelup.mp3');
+
+
 
 
 const fiveMinBreak = 300000;
@@ -53,13 +33,75 @@ const shortWorkTimerButton = document.querySelector('#shortWorkTimer');
 const longWorkTimerButton = document.querySelector('#longWorkTimer');
 const pauseButton = document.querySelector('#pauseButton');
 const resetButton = document.querySelector('#resetButton');
+const focusOneInner = document.querySelector('#focusOneText');
+const focusOneButton = document.querySelector('#focusButtonOne');
+const focusTwoInner = document.querySelector('#focusTwoText');
+const focusTwoButton = document.querySelector('#focusButtonTwo');
+const focusThreeInner = document.querySelector('#focusThreeText');
+const focusThreeButton = document.querySelector('#focusButtonThree');
+const rewardText = document.querySelector('#rewardText');
+const rewardButton = document.querySelector('#focusButtonReward');
+
+
+// focus button one -  focus buttons - move to module later if possible
+focusOneButton.addEventListener('click', () => {
+  if(focusOneInner.readOnly == true) {
+      focusOneButton.classList.replace("fa-lock", "fa-unlock-alt");
+      focusOneInner.classList.remove('focusSet');
+      focusOneInner.readOnly = false;
+    }else if((focusOneInner && focusOneInner.value)){
+      focusOneButton.classList.replace("fa-unlock-alt", "fa-lock");
+      focusOneInner.classList.add('focusSet');
+      focusOneInner.readOnly = true;
+    } 
+});
+// focus button two
+focusTwoButton.addEventListener('click', () => {
+  if(focusTwoInner.readOnly == true) {
+      focusTwoButton.classList.replace("fa-lock", "fa-unlock-alt");
+      focusTwoInner.classList.remove('focusSet');
+      focusTwoInner.readOnly = false;
+    }else if((focusTwoInner && focusTwoInner.value)){
+      focusTwoButton.classList.replace("fa-unlock-alt", "fa-lock");
+      focusTwoInner.classList.add('focusSet');
+      focusTwoInner.readOnly = true;
+    } 
+});
+// focus button three
+focusThreeButton.addEventListener('click', () => {
+  if(focusThreeInner.readOnly == true) {
+      focusThreeButton.classList.replace("fa-lock", "fa-unlock-alt");
+      focusThreeInner.classList.remove('focusSet');
+      focusThreeInner.readOnly = false;
+    }else if((focusThreeInner && focusThreeInner.value)){
+      focusThreeButton.classList.replace("fa-unlock-alt", "fa-lock");
+      focusThreeInner.classList.add('focusSet');
+      focusThreeInner.readOnly = true;
+    } 
+});
+// reward button
+rewardButton.addEventListener('click', () => {
+  if(rewardText.readOnly == true) {
+      rewardButton.classList.replace("fa-lock", "fa-unlock-alt");
+      rewardText.classList.remove('rewardSet');
+      rewardText.readOnly = false;
+    }else if((rewardText && rewardText.value)){
+      rewardButton.classList.replace("fa-unlock-alt", "fa-lock");
+      rewardText.classList.add('rewardSet');
+      rewardText.readOnly = true;
+    } 
+});
+
+
+
+  
 
 
 let timerRunning = false;
 let clockTimer;
 let cupCakeCounter = 0;
 let coffeeCounter = 0;
-let burgerCounter = 0;
+
 
 // while the timer is running, the hourglass spins
 
@@ -79,46 +121,14 @@ hourGlass.classList.remove('rotateGlass');
 // remove all red highlight button press effects on call  
 function removeButtonPress() {
   let pressed = document.getElementsByClassName('buttonPressed');
-  if(pressed.length > 0){
-  pressed[0].classList.remove('buttonPressed');
+
+  while(pressed.length > 0) {
+    pressed[0].classList.remove('buttonPressed')
+  }
   stopRotate();
-  };
 };
 
-let burgerQuery = () => {
-  // called after a work period is completed
-  // if user has completed 4 of the same consecutive work periods
-  // since 5am local time 
-  // they are rewarded with a burger badge and a long break -  
-  post(earnedBadgeData[2]);
-  burgerCounter++;
-  let burger = document.querySelector('#burger');
-    
-  let burgerBadge = document.createElement('img');
-  burgerBadge.src = 'doodle-05.svg';
-  burgerBadge.classList.add('badgeDetails');
 
-  
-
-  function addBurger() {
-    burgerEffect.play();
-    burger.classList.add('burgerBadge');
-    
-    function burgerDelay() {
-      burger.classList.remove('burgerBadge');
-      badges.appendChild(burgerBadge);
-    }
-    
-    setTimeout(burgerDelay, 2000);
-    
-        
-  };
-  
-  setTimeout(addBurger, 2000);
-    
-  
-
-};
 
 
 // start the timer for 25 minute work period
@@ -132,7 +142,16 @@ shortWorkTimerButton.addEventListener('click', () => {
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
   rotateGlass();
+  
+  // add the button pressed effect to both this button and 
+  // any locked in focuses
+  
   shortWorkTimerButton.classList.add('buttonPressed');
+
+  
+  engageFocuses();
+  
+  
   clockTimer = setInterval(() => {
     workDuration--;
     if(workDuration === 1){
@@ -147,6 +166,9 @@ shortWorkTimerButton.addEventListener('click', () => {
       timer.innerHTML = "SNACK TIME";
       completeEffect.play();
       pauseButton.innerHTML = "Pause";
+      let coffeeCup = document.createElement('img');
+      coffeeCup.src = 'doodle-46.svg';
+      coffeeCup.classList.add('badgeDetails');
       let coffee = document.querySelector('#coffee');
       coffee.classList.add('coffeeBadge');
       function removeGrow() {
@@ -155,11 +177,34 @@ shortWorkTimerButton.addEventListener('click', () => {
       };
       setTimeout(removeGrow, 2000);
       
-      post(earnedBadgeData[0]);
       
-      let coffeeCup = document.createElement('img');
-      coffeeCup.src = 'doodle-46.svg';
-      coffeeCup.classList.add('badgeDetails');
+      // find which focuses are still locked when timer is finished
+      // create the earned badge in the database
+      
+      let focusArray = document.querySelectorAll('.focusSet');
+
+      // queryselectorall returned an array of objects -- the following loop goes
+      // through the array and pulls the value off of each entry
+      
+      let focusArrayValues = [];
+      function pullFocusValues(){
+        for(let i = 0; i < focusArray.length; i++) {
+          focusArrayValues.push(focusArray[i].value);
+        }
+      };
+      pullFocusValues();
+      
+
+      
+
+      let earnedBadgeData = {
+        name: "Coffee",
+        focus: focusArrayValues
+      }
+
+      posty(earnedBadgeData);
+      
+      
       
      
       coffeeCounter++;
@@ -184,6 +229,7 @@ longWorkTimerButton.addEventListener('click', () => {
   timerRunning = true;
   rotateGlass();
   longWorkTimerButton.classList.add('buttonPressed');
+  engageFocuses();
   clockTimer = setInterval(() => {
     workDuration--;
     if(workDuration === 1){
@@ -205,7 +251,24 @@ longWorkTimerButton.addEventListener('click', () => {
         badges.appendChild(cupCakeBadge);
       };
       setTimeout(removeGrow, 2000);
-      post(earnedBadgeData[1]);
+      
+      let focusArray = document.querySelectorAll('.focusSet');
+      let focusArrayValues = [];
+      
+      function pullFocusValues(){
+        for(let i = 0; i < focusArray.length; i++) {
+          focusArrayValues.push(focusArray[i].value);
+        }
+      };
+      pullFocusValues();
+
+      let earnedBadgeData = {
+        name: "Cupcake",
+        focus: focusArrayValues
+      };
+
+      posty(earnedBadgeData);
+
       cupCakeCounter++;
       let cupCakeBadge = document.createElement('img');
       cupCakeBadge.src = 'doodle-24.svg';
@@ -399,27 +462,23 @@ resetButton.addEventListener('click', () => {
 
 
 
-// modal
-
-let ini= document.querySelector('#modal-window');
-
-ini.classList.add("hideModal");
-
-function openModal(){
-  let modal= document.querySelector('#modal-window');
-  modal.classList.remove("preload");
-  modal.classList.add("showModal");
-  
-}
-
-function closeM(){
-
-  let m= document.querySelector('#modal-window');
-  m.classList.remove("showModal");
-  
-}
 
 
+
+// nav bar slide out
+
+const hamburger = document.querySelector(".hamburger");
+const navLinks = document.querySelector(".nav-links");
+const links = document.querySelectorAll(".nav-links li");
+const navIcon = document.querySelector("#navBars");
+
+hamburger.addEventListener("click", () => {
+  navBars.classList.toggle("fa-times");
+  navLinks.classList.toggle("open");
+  links.forEach(link => {
+    link.classList.toggle("fade");
+  });
+});
 
 
 
