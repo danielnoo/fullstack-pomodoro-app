@@ -10,7 +10,8 @@ const BadgeSchema = new mongoose.Schema({
     ref: 'User',
   },
   focus: {
-    type: [String]
+    type: [String],
+    default: []
   },
   createdAt: {
     type: Date,
