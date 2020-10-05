@@ -3,13 +3,16 @@
 
 import {posty} from './badgeRewards.js'
 import {engageFocuses} from './focusConsole.js'
-import {burgerQuery} from './burgerQuery.js'
+
+
 
 
 
         
 const soundEffect = new Audio('sms-alert-1-daniel_simon.wav');
 const completeEffect = new Audio('finishtone.mp3');
+const burgerEffect = new Audio('burgerlevelup.mp3');
+
 
 
 
@@ -41,7 +44,23 @@ const focusThreeInner = document.querySelector('#focusThreeText');
 const focusThreeButton = document.querySelector('#focusButtonThree');
 const rewardText = document.querySelector('#rewardText');
 const rewardButton = document.querySelector('#focusButtonReward');
+const coffeeCounterText = document.querySelector('#coffeeCounterText');
+const cupCakeCounterText = document.querySelector('#cupCakeCounterText');
+const burgerCounterText = document.querySelector('#burgerCounterText');
 
+
+let timerRunning = false;
+let clockTimer;
+let cupCakeCounter = 0;
+let coffeeCounter = 0;
+let burgerCounter = 0;
+
+
+// if user is unresponsive for 4 hours, session badge counters are 
+// reset to zero
+
+
+checkIdle();
 
 // focus button one -  focus buttons - move to module later if possible
 focusOneButton.addEventListener('click', () => {
@@ -97,10 +116,7 @@ rewardButton.addEventListener('click', () => {
   
 
 
-let timerRunning = false;
-let clockTimer;
-let cupCakeCounter = 0;
-let coffeeCounter = 0;
+
 
 
 // while the timer is running, the hourglass spins
@@ -209,9 +225,14 @@ shortWorkTimerButton.addEventListener('click', () => {
      
       coffeeCounter++;
       if((coffeeCounter % 4) === 0) {
+        coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
         burgerQuery();
+        removeButtonPress();
+      } else {
+        coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
+        removeButtonPress();
+      
       }
-      removeButtonPress();
     }
   }, 50)
 });
@@ -252,6 +273,8 @@ longWorkTimerButton.addEventListener('click', () => {
       };
       setTimeout(removeGrow, 2000);
       
+      // grab locked focus values and enter them into the db
+
       let focusArray = document.querySelectorAll('.focusSet');
       let focusArrayValues = [];
       
@@ -270,15 +293,22 @@ longWorkTimerButton.addEventListener('click', () => {
       posty(earnedBadgeData);
 
       cupCakeCounter++;
+
       let cupCakeBadge = document.createElement('img');
       cupCakeBadge.src = 'doodle-24.svg';
       cupCakeBadge.classList.add('badgeDetails');
       if((cupCakeCounter % 4) === 0) {
+        cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
         burgerQuery();
+        removeButtonPress();
+      } else {
+        cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
+        removeButtonPress();
+      
       };
       removeButtonPress();
     }
-  }, 60000)
+  }, 50) // 60000 for 45 mins
 });
 
 // short break button
@@ -462,6 +492,58 @@ resetButton.addEventListener('click', () => {
 
 
 
+// /////////////////////////////////////////////////
+
+function burgerQuery()  {
+  // called after a work period is completed
+  // if user has completed 4 of the same consecutive work periods
+  // without triggering checkIdle()
+  // they are rewarded with a burger badge and a long break -  
+  
+  // post badge to database
+  let earnedBadgeData = {name: "Burger", focus: document.querySelector('#rewardText').value};
+  posty(earnedBadgeData);
+  
+  burgerCounter++;
+  burgerCounterText.innerText = 'x' + ' ' + burgerCounter;
+  let burger = document.querySelector('#burger');
+    
+  let burgerBadge = document.createElement('img');
+  burgerBadge.src = 'doodle-05.svg';
+  burgerBadge.classList.add('badgeDetails');
+
+
+// if reward is locked when burger badge is earned then have the reward textbox 
+// flash, maybe with some kind of animation -- flash the correct long break 
+// timer button
+
+// animate the burger after a 2 second delay to give the
+// other reward animation time to complete
+  function addBurger() {
+    burgerEffect.play();
+    burger.classList.add('burgerBadge');
+    
+    function burgerDelay() {
+      burger.classList.remove('burgerBadge');
+      badges.appendChild(burgerBadge);
+    }
+    
+    setTimeout(burgerDelay, 2000);
+    
+        
+  };
+  
+  setTimeout(addBurger, 2000);
+    
+  
+
+};
+
+
+
+
+
+
 
 
 
@@ -480,6 +562,32 @@ hamburger.addEventListener("click", () => {
   });
 });
 
+
+
+
+// check if the user has gone idle and zero out their counters if so
+
+function checkIdle() {
+  let time;
+  window.onload = resetTimer;
+  window.onmousemove = resetTimer;
+  window.onmousedown = resetTimer;  // catches touchscreen presses as well      
+  window.ontouchstart = resetTimer; // catches touchscreen swipes as well 
+  window.onclick = resetTimer;      // catches touchpad clicks as well
+  window.onkeydown = resetTimer;   
+  window.addEventListener('scroll', resetTimer, true); // improved; see comments
+
+  function zeroCounters() {
+      coffeeCounter = 0;
+      cupCakeCounter = 0;
+      burgerCounter = 0;
+  }
+
+  function resetTimer() {
+      clearTimeout(time);
+      time = setTimeout(zeroCounters, 10000);  // time is in milliseconds
+  }
+}
 
 
 
