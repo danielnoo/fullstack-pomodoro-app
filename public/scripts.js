@@ -47,6 +47,9 @@ const rewardButton = document.querySelector('#focusButtonReward');
 const coffeeCounterText = document.querySelector('#coffeeCounterText');
 const cupCakeCounterText = document.querySelector('#cupCakeCounterText');
 const burgerCounterText = document.querySelector('#burgerCounterText');
+const coffeeImg = document.querySelector('#coffee');
+const cupCakeImg = document.querySelector('#cupcake');
+const burgerImg = document.querySelector('#burger');
 
 
 let timerRunning = false;
@@ -54,6 +57,10 @@ let clockTimer;
 let cupCakeCounter = 0;
 let coffeeCounter = 0;
 let burgerCounter = 0;
+
+
+
+
 
 
 // if user is unresponsive for 4 hours, session badge counters are 
@@ -210,14 +217,12 @@ shortWorkTimerButton.addEventListener('click', () => {
       };
       pullFocusValues();
       
-
-      
-
       let earnedBadgeData = {
         name: "Coffee",
         focus: focusArrayValues
       }
 
+      // send badge data to db - name, focus, timestamp
       posty(earnedBadgeData);
       
       
@@ -231,6 +236,7 @@ shortWorkTimerButton.addEventListener('click', () => {
       } else {
         coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
         removeButtonPress();
+        coffeeImg.classList.remove('addGrayscale');
       
       }
     }
@@ -304,6 +310,7 @@ longWorkTimerButton.addEventListener('click', () => {
       } else {
         cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
         removeButtonPress();
+        cupCakeImg.classList.remove('addGrayscale');
       
       };
       removeButtonPress();
@@ -522,6 +529,7 @@ function burgerQuery()  {
   function addBurger() {
     burgerEffect.play();
     burger.classList.add('burgerBadge');
+    burgerImg.classList.remove('addGrayscale');
     
     function burgerDelay() {
       burger.classList.remove('burgerBadge');
@@ -581,8 +589,13 @@ function checkIdle() {
       coffeeCounter = 0;
       cupCakeCounter = 0;
       burgerCounter = 0;
-  }
-
+      coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
+      cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
+      burgerCounterText.innerText = 'x' + ' ' + burgerCounter;
+      coffeeImg.classList.add('addGrayscale');
+      cupCakeImg.classList.add('addGrayscale');
+      burgerImg.classList.add('addGrayscale');
+  }   
   function resetTimer() {
       clearTimeout(time);
       time = setTimeout(zeroCounters, 10000);  // time is in milliseconds
