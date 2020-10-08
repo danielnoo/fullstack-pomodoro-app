@@ -3,6 +3,8 @@
 
 import {posty} from './badgeRewards.js'
 import {engageFocuses} from './focusConsole.js'
+import {suggestBreak} from './suggestBreak.js'
+
 
 
 
@@ -27,7 +29,7 @@ const badges = document.querySelector('#badges');
 const timer = document.querySelector("#clock");
 
 
-// buttons
+// declare buttons and text boxes that javascript needs access to
 const fiveMinBreakButton = document.querySelector('#shortBreak');
 const fifteenMinBreakButton = document.querySelector('#longBreak');
 const thirtyMinBreakButton = document.querySelector('#thirtyBreak');
@@ -59,15 +61,13 @@ let coffeeCounter = 0;
 let burgerCounter = 0;
 
 
-
-
-
-
 // if user is unresponsive for 4 hours, session badge counters are 
 // reset to zero
 
 
 checkIdle();
+
+// focus console
 
 // focus button one -  focus buttons - move to module later if possible
 focusOneButton.addEventListener('click', () => {
@@ -120,27 +120,6 @@ rewardButton.addEventListener('click', () => {
 
 
 
-  
-
-
-
-
-
-// while the timer is running, the hourglass spins
-
-let rotateGlass = () => {
- hourGlass.classList.add('rotateGlass');
-};
-
-let stopRotate = () => {
-hourGlass.classList.remove('rotateGlass');
-};
-
-
-
-
-
-
 // remove all red highlight button press effects on call  
 function removeButtonPress() {
   let pressed = document.getElementsByClassName('buttonPressed');
@@ -148,13 +127,14 @@ function removeButtonPress() {
   while(pressed.length > 0) {
     pressed[0].classList.remove('buttonPressed')
   }
-  stopRotate();
+  
 };
 
 
 
 
-// start the timer for 25 minute work period
+// start the timer for 25 minute work period -- possibly come back to refactor this
+// according to DRY principles as much of the 45 minute work button code is reused
 
 shortWorkTimerButton.addEventListener('click', () => {
   if(timerRunning === true) {
@@ -164,8 +144,7 @@ shortWorkTimerButton.addEventListener('click', () => {
   let workDuration = 25;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
-  
+    
   // add the button pressed effect to both this button and 
   // any locked in focuses
   
@@ -189,15 +168,11 @@ shortWorkTimerButton.addEventListener('click', () => {
       timer.innerHTML = "SNACK TIME";
       completeEffect.play();
       pauseButton.innerHTML = "Pause";
-      let coffeeCup = document.createElement('img');
-      coffeeCup.src = 'doodle-46.svg';
-      coffeeCup.classList.add('badgeDetails');
       let coffee = document.querySelector('#coffee');
       coffee.classList.add('coffeeBadge');
       function removeGrow() {
         coffee.classList.remove('coffeeBadge');
-        badges.appendChild(coffeeCup);
-      };
+        };
       setTimeout(removeGrow, 2000);
       
       
@@ -224,18 +199,22 @@ shortWorkTimerButton.addEventListener('click', () => {
 
       // send badge data to db - name, focus, timestamp
       posty(earnedBadgeData);
+               
       
+      // check if 4th work period has been completed and suggest
+      // a long break if it has - otherwise remove grayscale effect
+      // on badges and continue, suggesting a short break
       
-      
-     
       coffeeCounter++;
       if((coffeeCounter % 4) === 0) {
         coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
         burgerQuery();
         removeButtonPress();
+        suggestBreak(thirtyMinBreakButton);
       } else {
         coffeeCounterText.innerText = 'x' + ' ' + coffeeCounter;
         removeButtonPress();
+        suggestBreak(fiveMinBreakButton);   
         coffeeImg.classList.remove('addGrayscale');
       
       }
@@ -254,7 +233,6 @@ longWorkTimerButton.addEventListener('click', () => {
   let workDuration = 45;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
   longWorkTimerButton.classList.add('buttonPressed');
   engageFocuses();
   clockTimer = setInterval(() => {
@@ -264,22 +242,21 @@ longWorkTimerButton.addEventListener('click', () => {
     } else {
     timer.innerHTML = workDuration + ' minutes';
     }
-// work duration is completed so sound and animation play, the earned 
-// badge is appended to the user's stats page
+// work duration is completed so sound and animation play
     if(workDuration === 0) {
       clearInterval(clockTimer);
-      timer.innerHTML = "SNACK TIME";
+      timer.innerHTML = "GET TO IT";
       completeEffect.play();
       pauseButton.innerHTML = "Pause";
       let cupCake = document.querySelector('#cupcake');
       cupCake.classList.add('imgGrow');
       function removeGrow() {
         cupCake.classList.remove('imgGrow');
-        badges.appendChild(cupCakeBadge);
       };
       setTimeout(removeGrow, 2000);
       
       // grab locked focus values and enter them into the db
+      // along with timestamp
 
       let focusArray = document.querySelectorAll('.focusSet');
       let focusArrayValues = [];
@@ -298,24 +275,29 @@ longWorkTimerButton.addEventListener('click', () => {
 
       posty(earnedBadgeData);
 
+      
+      
+      // check if the 4th work period has completed and if it has, award the 
+      // burger badge and suggest a 60 minute break -- otherwise remove grayscale effect
+      // on badges and continue, suggesting a short break
+      
+      
       cupCakeCounter++;
-
-      let cupCakeBadge = document.createElement('img');
-      cupCakeBadge.src = 'doodle-24.svg';
-      cupCakeBadge.classList.add('badgeDetails');
       if((cupCakeCounter % 4) === 0) {
         cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
         burgerQuery();
         removeButtonPress();
+        suggestBreak(sixtyMinBreakButton);
       } else {
         cupCakeCounterText.innerText = 'x' + ' ' + cupCakeCounter;
         removeButtonPress();
+        suggestBreak(fifteenMinBreakButton);
         cupCakeImg.classList.remove('addGrayscale');
       
       };
       removeButtonPress();
     }
-  }, 50) // 60000 for 45 mins
+  }, 60000) // 60000 for 45 mins
 });
 
 // short break button
@@ -328,7 +310,6 @@ fiveMinBreakButton.addEventListener('click', () => {
   let workDuration = 5;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
   fiveMinBreakButton.classList.add('buttonPressed');
   clockTimer = setInterval(() => {
     workDuration--;
@@ -359,7 +340,6 @@ fifteenMinBreakButton.addEventListener('click', () => {
   let workDuration = 15;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
   fifteenMinBreakButton.classList.add('buttonPressed');
   clockTimer = setInterval(() => {
     workDuration--;
@@ -389,7 +369,6 @@ thirtyMinBreakButton.addEventListener('click', () => {
   let workDuration = 30;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
   thirtyMinBreakButton.classList.add('buttonPressed');
   clockTimer = setInterval(() => {
     workDuration--;
@@ -406,7 +385,7 @@ thirtyMinBreakButton.addEventListener('click', () => {
       removeButtonPress();
       pauseButton.innerHTML = "Pause";
     }
-  }, 1000)
+  }, 60000)
 });
 
 // sixty minute break
@@ -419,7 +398,6 @@ sixtyMinBreakButton.addEventListener('click', () => {
   let workDuration = 60;
   timer.innerHTML = workDuration + ' minutes';
   timerRunning = true;
-  rotateGlass();
   sixtyMinBreakButton.classList.add('buttonPressed');
   
   clockTimer = setInterval(() => {
@@ -436,7 +414,7 @@ sixtyMinBreakButton.addEventListener('click', () => {
       removeButtonPress();
       pauseButton.innerHTML = "Pause";
     }
-  }, 1000)
+  }, 60000)
 });
 
 // pause and resume the clock with alarm intact
@@ -451,23 +429,22 @@ pauseButton.addEventListener('click', () => {
     pauseButton.classList.remove('buttonPressed');
     pauseButton.innerHTML = "Pause";
     timerRunning = true;
-    rotateGlass();
     clockTimer = setInterval(() => {
-      workDuration--;
-      if(workDuration === 1){
+    workDuration--;
+  if(workDuration === 1){
         timer.innerHTML = workDuration + ' minute!!!'
       } else {
       timer.innerHTML = workDuration + ' minutes';
       }
       if(workDuration === 0) {
         clearInterval(clockTimer);
-        timer.innerHTML = "SNACK TIME";
+        timer.innerHTML = "GET TO IT";
         soundEffect.play();
         pauseButton.innerHTML = "Pause";
         timerRunning = false;
         removeButtonPress();
       }
-    }, 1000)
+    }, 60000)
 // pause
   } else {
     if(timer.innerHTML === "SNACK TIME" || timer.innerHTML === "GET TO IT") {
@@ -475,7 +452,6 @@ pauseButton.addEventListener('click', () => {
     }
     clearInterval(clockTimer);
     pauseButton.innerHTML = "Resume";
-    stopRotate();
     pauseButton.classList.add('buttonPressed');
     timerRunning = false;
   }
@@ -486,14 +462,9 @@ pauseButton.addEventListener('click', () => {
 resetButton.addEventListener('click', () => {
   clearInterval(clockTimer);
   timer.innerHTML = "GET TO IT";
-
-  // use recursion to remove the button pressed effect
-  // from any button that has it
-
-  
-  
+      
   removeButtonPress();
-  stopRotate();
+  
 
 });
 
@@ -515,10 +486,7 @@ function burgerQuery()  {
   burgerCounterText.innerText = 'x' + ' ' + burgerCounter;
   let burger = document.querySelector('#burger');
     
-  let burgerBadge = document.createElement('img');
-  burgerBadge.src = 'doodle-05.svg';
-  burgerBadge.classList.add('badgeDetails');
-
+  
 
 // if reward is locked when burger badge is earned then have the reward textbox 
 // flash, maybe with some kind of animation -- flash the correct long break 
@@ -598,28 +566,52 @@ function checkIdle() {
   }   
   function resetTimer() {
       clearTimeout(time);
-      time = setTimeout(zeroCounters, 10000);  // time is in milliseconds
+      time = setTimeout(zeroCounters, 18000000);  // time is in milliseconds
   }
 }
+
+
+
+/// Tab buttons for mobile
+
+const workTab = document.querySelector('.workTab');
+const focusTab = document.querySelector('.focusTab');
+const focusBox = document.querySelector('.focusContainer');
+const breakButtonBox = document.querySelector('.breakButtonContainer');
+
+
+focusTab.addEventListener('click', () => {
+  console.log('click');
+  focusBox.classList.add('enableTab');
+  breakButtonBox.classList.add('disableTab');
+  workTab.classList.remove('tabPressed');
+  focusTab.classList.add('tabPressed');
+
+});
+
+workTab.addEventListener('click', () => {
+  focusBox.classList.remove('enableTab');
+  breakButtonBox.classList.remove('disableTab');
+  breakButtonBox.classList.add('enableTab');
+  workTab.classList.add('tabPressed');
+  focusTab.classList.remove('tabPressed');
+});
+
+
+
 
 
 
 
 // todo
 
-// light up the corresponding break timer after a work period is complete
 
-// logic for resetting burger reward
-// applying burger reward
-
-// light up pause/resume button after pushed
 
 
 // award for hitting personal best - peanut butter badge
 
 // adding behavioural analysis to reward/break earning
 
-// rewards not being given if pause/resume is used to complete
 
 // refactor for DRY principles!!!! ************************
 
@@ -629,6 +621,6 @@ function checkIdle() {
 // function call - - have rewards given based on which button is pressed
 // when timer runs out
 
-// separate into multiple files and use import/export
+
 
 
