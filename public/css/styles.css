@@ -19,6 +19,7 @@
   }
   #clock {
     font-size: 2.5rem !important;
+    margin-top: 50px;
   }
   #burger {
     height: 75px !important;
@@ -35,12 +36,27 @@
   .consoleContainer {
     justify-content: center !important;
   }
+  #cupCakeCounterText {
+    font-size: 1.5rem !important;
+  }
+  #coffeeCounterText {
+    font-size: 1.5rem !important;
+  }
+  #burgerCounterText {
+    font-size: 1.5rem !important;
+  }
  }
  @media only screen and (min-width: 1000px) {
    #tabButtons {
      display: none !important;
    }
  }
+ @media only screen and (min-width: 1366px) {
+  .hamburger {
+    right: 13% !important;
+  }
+}
+
  
 
 
@@ -621,9 +637,9 @@ p:hover {
 .hamburger {
   position: absolute;
   cursor: pointer;
-  right: 2.5%;
-  top: 8.25%;
-  transform: translate(-5%, -50%);
+  right: 5.25%;
+  top: 5.25%;
+  
   z-index: 1601;
   box-sizing: content-box;
 }
@@ -632,15 +648,14 @@ p:hover {
   position: fixed;
   background: #E27683;
   height: 100vh;
-  width: 100%;
+  width: 100% !important;
   flex-direction: column;
-  clip-path: circle(60px at 90% 12%);
-  -webkit-clip-path: ellipse(5% 12% at 90% 12%);
+  clip-path: ellipse(5% 12% at 90% 12%);
+  -webkit-clip-path: circle(10% at 50% 50%);
   transition: all 1s ease-out;
   pointer-events: none;
   z-index: 1500;
-  top: 2%;
-  right: 5.75%;
+  
   justify-content: center;
   opacity: 0;
   list-style: none;
@@ -650,7 +665,7 @@ p:hover {
 }
 .nav-links.open {
   clip-path: ellipse(25% 40% at 56% 49%);
-  -webkit-clip-path: ellipse(25% 60% at 56% 49%);
+  -webkit-clip-path: circle(40.0% at 50% 50%);
   pointer-events: all;
   background-color: aliceblue;
   z-index: 1600;
@@ -659,27 +674,28 @@ p:hover {
   opacity: 1;
   list-style: none;
   
+  
 }
 
-.nav-links li {
+.nav-links div {
   
   list-style: none;
 }
-.nav-links li a {
+.nav-links div a {
   color: black;
   text-decoration: none;
   
 }
-.nav-links li:nth-child(1) {
+.nav-links div:nth-child(1) {
   transition: all 0.5s ease 0.2s;
 }
-.nav-links li:nth-child(2) {
+.nav-links div:nth-child(2) {
   transition: all 0.5s ease 0.4s;
 }
-.nav-links li:nth-child(3) {
+.nav-links div:nth-child(3) {
   transition: all 0.5s ease 0.6s;
 }
-li.fade {
+div.fade {
   opacity: 1;
 }
 
@@ -713,8 +729,7 @@ li.fade {
 }
 
 #menuWrapper {
-  margin-top: -3%;
-  margin-left: 85px;
+
   position: absolute;
   top: 50%;
   left: 50%;

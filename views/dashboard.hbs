@@ -1,8 +1,13 @@
-
-
-<main class="app">
-  
-  <div class="hamburger">
+<div class="nav-links">
+      
+      <div id="menuWrapper">
+        <div><img id="googleProfilePic" src="{{image}}" alt="Google Profile Image"/></div>
+        <div class="menuButtons"><a href="/stats/{{user._id}}">My Stats</a></div>
+        <div class="menuButtons"><a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">What's a Pomodoro?</a></div>
+        <div class="menuButtons"><a href="/auth/logout">Logout</a></div>
+      </div>
+</div>
+<div class="hamburger">
        <i id="navBars" class="fas fa-bars"></i>
   </div>
   <div class="nav-links">
@@ -14,6 +19,9 @@
         <li class="menuButtons"><a href="/auth/logout">Logout</a></li>
       </ul>
   </div>
+<main class="app">
+  
+  
   
   <div id="clock">
           GET TO IT, {{name}}
