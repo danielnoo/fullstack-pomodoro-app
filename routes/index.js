@@ -4,7 +4,7 @@ const { ensureAuth, ensureGuest} = require('../middleware/auth')
 const mongoose = require('mongoose')
 const User = require('../models/User')
 const Badge = require('../models/badges')
-const { post } = require('../middleware/post')
+
 
 
 
@@ -15,12 +15,13 @@ router.post('/dashboard', ensureAuth, async (req, res) => {
   let rewardBadge = new Badge({
     name: req.body.name,
     user: req.user.id,
+    focus: req.body.focus,
     createdAt: new Date()
   })
   try {
     rewardBadge = await rewardBadge.save()
     
-    res.redirect('/dashboard')
+    res.json('Badge stored in DB!')
       
   } catch (err) {
     console.error(err)
@@ -41,6 +42,7 @@ router.get('/dashboard', ensureAuth, (req, res) => {
   try {
     res.render('dashboard', {
       name: req.user.firstName,
+      image: req.user.image,
       layout: 'main',
     })
     console.log(req.session)

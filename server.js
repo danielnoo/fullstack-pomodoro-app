@@ -32,9 +32,21 @@ if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+// handlebars helpers
+
+const { formatDate } = require('./helpers/hbs')
+
 // handlebars
 
-app.engine('.hbs', exphbs({extname: '.hbs'}));
+app.engine('.hbs', exphbs({
+    helpers: {
+      formatDate,
+    },
+    defaultLayout: 'login',
+    extname: '.hbs',
+  })
+);
+
 app.set('view engine', '.hbs');
 
 // express session
@@ -43,8 +55,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({mongooseConnection: mongoose.connection})
-})
-)
+}))
 
 
 // set passport middleware
@@ -66,6 +77,7 @@ app.use(express.static(publicPath))
 
 app.use('/', require('./routes/index'))
 app.use('/auth', require('./routes/auth'))
+app.use('/stats', require('./routes/stats'))
 
 
 const PORT = process.env.PORT || 3000

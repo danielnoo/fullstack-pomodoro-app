@@ -1,0 +1,11 @@
+
+
+<section class="stats">
+  <div id="statsHeader">{{name}}'s amazing achievements: <a href="/dashboard" title="Back to Dashboard" id="backButton" class="fas fa-arrow-left"></a></div>
+  <div id="badges">
+    {{#each badges}}
+    <div class="{{name}}" title="Completed on: {{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}{{#if focus}} and focused on: {{focus}}{{/if}}"></div>
+    {{/each}}
+
+  </div>
+</section>

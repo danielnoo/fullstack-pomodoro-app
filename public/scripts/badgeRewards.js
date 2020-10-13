@@ -1,10 +1,13 @@
-const earnedBadgeData = [
-  {name: "coffee"}, 
-  {name: "cupcake"}, 
-  {name: "burger"}
-];
 
-async function post(data) {
+
+
+
+
+
+
+export async function posty(data) {
+   
+  
   try {
       // Create request to api service
       const req = await fetch('/dashboard', {
@@ -13,8 +16,8 @@ async function post(data) {
           
           // format the data
           body: JSON.stringify({
-              name: data.name,
-              
+            name: data.name,
+            focus: data.focus          
           }),
       });
       
@@ -23,9 +26,7 @@ async function post(data) {
       // Log success message
       console.log(res);                
   } catch(err) {
-      console.error(`ERROR: ${err}`);
+      console.log(err);
   }
-};
+}
 
-module.exports.earnedBadgeData = earnedBadgeData;
-module.exports.post = post;
