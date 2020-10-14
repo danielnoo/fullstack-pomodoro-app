@@ -81,7 +81,7 @@
   .nav-links.open {
     clip-path: circle(60% at 50% 60%) !important;
     -webkit-clip-path: circle(60% at 50% 60%) !important;
-
+  }
 }
 
  
@@ -842,3 +842,4 @@ div.fade {
 .disableTab {
   display: none !important;
 }
+

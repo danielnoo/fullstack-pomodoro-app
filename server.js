@@ -2,7 +2,7 @@
 const path = require('path')
 const express = require('express')
 const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+// const dotenv = require('dotenv')
 const morgan = require('morgan')
 const exphbs = require('express-handlebars')
 const passport = require('passport')
@@ -12,7 +12,7 @@ const connectDB = require('./config/db')
 const publicPath = path.resolve(__dirname, 'public')
 
 //load config
-dotenv.config({path: './config/config.env'})
+// dotenv.config({path: './config/config.env'})
 
 // passport config
 require('./config/passport')(passport)
