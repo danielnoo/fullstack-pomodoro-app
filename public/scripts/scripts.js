@@ -219,7 +219,7 @@ shortWorkTimerButton.addEventListener('click', () => {
       
       }
     }
-  }, 50)
+  }, 60000)
 });
 
 
